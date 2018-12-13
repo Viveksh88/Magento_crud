@@ -1,0 +1,84 @@
+<?php
+
+$collectiondata = $block->Receivedata();?>
+
+<div class="page-title-wrapper">
+    <h1 class="page-title">
+        <span class="base">Data Collections...!</span>
+    </h1>
+</div>
+<a href="<?php echo $this->getUrl('crud/crud/index'); ?>"><button class="action submit primary" >Register Your Self</button></a>
+    <?php $i = 1; ?>
+    <div class="dashboard-item-content">
+
+        <table class="admin__table-primary">
+            <tr>
+                <th class="data-grid-th">S.No.</th>
+                <th class="data-grid-th">UserName</th>
+                <th class="data-grid-th">FirstName</th>
+                <th class="data-grid-th">LastName</th>
+                <th class="data-grid-th">Email</th>
+                <th class="data-grid-th">Edit</th>
+                <th class="data-grid-th">Delete</th>  
+            </tr>
+            
+                <?php foreach($collectiondata as $collection):?>
+                    <tr>
+                        <?php $id = $collection['excellence_crud_id'];?>
+                        <td  hidden class="edit_id"><?php echo $id;?></td>
+                        <td  class="s_no "><?php echo $i;?></td>
+                        <td contenteditable="false" class="username"><?php echo $collection['username'];?></td>
+                        <td contenteditable="false" class="fname "><?php echo $collection['fristname'];?></td>
+                        <td contenteditable="false" class="lastname"><?php echo $collection['lastname'];?></td>
+                        <td contenteditable="false" class="email_id "><?php echo $collection['email'];?></td>
+                        <td hidden class="pass"><?php echo $collection['password'];?></td>
+                        <td id="edittable" title="Edit"  type="Edit"><button>Edit</button></td>
+                        <td class=""><a href="<?php echo $this->getUrl('crud/form/index/id=.', array('delete_id' => $id));?>"> <button class="action primary"> Delete</button></a></td>
+                    </tr>
+                    <?php $i++; ?>
+                <?php endforeach;?>
+            </tr>     
+        </table>
+    </div>
+
+<script>
+require(
+   ['jquery'],
+        function($) {
+            $('#edittable').click(function () {
+              var currentTD = $(this).parents('tr').find('td');
+              if ($(this).html() == '<button>Edit</button>') {
+                    currentTD = $(this).parents('tr').find('td');
+                    $.each(currentTD, function () {
+                        $(this).prop('contenteditable', true);
+                    });
+                } else {
+                    $.each(currentTD, function () {
+                       $(this).prop('contenteditable', false);
+                    });
+                }   
+                $(this).html($("#edittable").html() == '<button>Edit</button>' ? '<button>Save</button>' : '<button>Edit</button>');
+                if($('#edittable').text() !== 'Save'){
+                    var id = $(".edit_id").text();
+                    var uname =  $(".username").text();
+                    var fname = $(".fname").text();
+                    var lname = $(".lastname").text();
+                    var e_mail_ad = $(".email_id").text();
+                    
+                    var p_wd = $(".pass").text();
+                    
+                    $.ajax({
+                        url:"<?php echo $this->getUrl('crud/form/index');?>",
+                        data:{id:id,uname:uname,fname:fname,lname:lname,email_ad:e_mail_ad,pwd:p_wd},
+                        type:'POST',
+                        success:function(response){
+                            if(response){
+                                window.location.reload();
+                            }
+                        }
+                    });      
+                }
+            });         
+        }
+   );
+</script>

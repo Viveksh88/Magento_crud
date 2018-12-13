@@ -1,0 +1,111 @@
+<?php
+/**
+ * Copyright © 2015 excellencecommerce. All rights reserved.
+ */
+?>
+<?php
+/**
+ * {{controller}} {{action}} template
+ *
+ * @var $block \Excellence\Crud\Block\Crud\Index
+ */
+
+
+
+$collectiondata = $block->Receivedata();
+
+?>
+<div class="page-title-wrapper">
+    <h1 class="page-title">
+       <span class="base">Welcome...! Please Register Youself Here...</span>
+   </h1>
+</div>
+
+
+
+    <form class="form create account" name="senddata" action="<?php echo $this->getUrl("crud/form/index");?>" method="POST">
+        <fieldset class="fieldset ">
+            <input type="hidden" name = "user_u_id" class="get_id">
+            <div class="field  required">
+                <label class="label">
+                    <span>UserName:</span>
+                </label> 
+                <div class="control">
+                    <input required="true" class="username_edit input-text required-entry" placeholder="Enter Your Username" type="text" name="username" value="" minlength="5" maxlength="10">
+                </div>
+            </div>
+            <div class="field  required">
+                <label class="label">
+                    <span>First Name:</span>
+                </label> 
+                <div class="control">
+                    <input required="true" class="fname_edit input-text required-entry" placeholder="Enter Your Firstname" type="text" name="fname" value="" minlength = "5" maxlength="10">
+                </div>
+            <div>
+        </fieldset>
+        <fieldset class="fieldset">
+            <div class="field  required">
+                <label class="label">
+                    <span>Last Name:</span>
+                </label>
+                <div class="control"> 
+                    <input required="true" class="lname_edit input-text required-entry" placeholder="Enter Your Lastname" type="text" name="lname" value="" minlength = "4" maxlength="10">
+                </div>
+            </div>           
+            <div class="field required">
+                <label class="label">
+                    <span>Email:</span>
+                </label> 
+                <div class="control"> 
+                    <input required="true" class="email_edit input-text" placeholder="Enter Your Email Address" type="text" name="email" value="" >
+                </div>
+            </div>
+            <div class="field required">
+                <label class="label">
+                    <span>Password:</span>
+                </label>
+                <div class="control"> 
+                    <input required="true" class = "pass_edit input-text required-entry" placeholder="Enter Your Password...!" type="password" name="password" value = "" minlength = "5">
+                    <div class="password-strength-meter-container">
+                        <div class="password-strength-meter">
+                            Password Strength:
+                            <span id="password-strength-meter-label"> Min 5 character</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           <div class="actions-toolbar">
+                <div class="primary">
+                    <button name="send_data" class="action submit primary" title="Register/Update">Register/Update</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</fieldset>
+
+<!-- Fetching Data To Edit -->
+<!-- <script>
+   require(
+       ['jquery'],
+       function($) {
+           $(".edittable").click(function(){
+            var row = $(this).closest("tr");    // Find the row
+            var table_id = row.find(".edit_id").text();
+            var username = row.find(".username").text();
+            var fname = row.find(".fname").text();
+            var lname = row.find(".lastname").text();
+            var email = row.find(".email").text();
+            var pass = row.find(".pass").text();
+
+            // Showing Data for editing on Table...
+            $(".get_id").val(table_id);
+            $(".username_edit").val(username);
+            $(".fname_edit").val(fname);
+            $(".lname_edit").val(lname);
+            $(".email_edit").val(email);
+            $(".pass_edit").val(pass);
+               
+           });
+        }
+    );
+</script> -->
