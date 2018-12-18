@@ -61,6 +61,23 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
+        // $delete_data = $this->getRequest()->getParams('id');
+        // if(isset($delete_data['edit_id'])){
+        //     $id=$delete_data['edit_id'];
+
+            
+
+        //     $edata = $this->_collectiondata->create();
+        //     $da = $edata->load($id);
+            
+           
+        //    $this->_coreRegistry->register('data_test',$da);
+        //    $collection = $this->_coreRegistry->registry('data_test');
+        //    echo "<pre>";
+        //     print_r($collection->getData());
+        //     die();
+
+        // }
         // $postModel = $this->_collectiondata->create();
 
 

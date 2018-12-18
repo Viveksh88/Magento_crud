@@ -43,6 +43,7 @@ class Index extends \Magento\Framework\App\Action\Action
         
     
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\Registry $coreRegistry,
         \Excellence\Crud\Model\TestFactory  $dataSend,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,
@@ -50,7 +51,7 @@ class Index extends \Magento\Framework\App\Action\Action
     ) {
         parent::__construct($context);
         
-        
+        $this->_coreRegistry = $coreRegistry;
         $this->_dataSend = $dataSend;
         $this->_cacheTypeList = $cacheTypeList;
         $this->_cacheState = $cacheState;
@@ -64,6 +65,7 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
+
         // Deleting Data From Database......using Id..
         $delete_data = $this->getRequest()->getParams('id');
         if(isset($delete_data['delete_id'])){

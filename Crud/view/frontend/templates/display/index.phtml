@@ -1,7 +1,17 @@
 <?php
 
 $collectiondata = $block->Receivedata();?>
-
+<div class="block block-content">
+    <!-- <form class="form minisearch" id="search_mini_form"action=""> -->
+        <div class="field search">
+            <div class="control">
+                <input class="input-val" maxlength="128" type="text" placeholder="Search for Username">
+                <button id="find" class="action primary ">Search</button>
+            </div>
+        </div>
+    <!-- </form> -->
+</div>
+<div class="add_data"></div>
 <div class="page-title-wrapper">
     <h1 class="page-title">
         <span class="base">Data Collections...!</span>
@@ -18,8 +28,8 @@ $collectiondata = $block->Receivedata();?>
                 <th class="data-grid-th">FirstName</th>
                 <th class="data-grid-th">LastName</th>
                 <th class="data-grid-th">Email</th>
-                <th class="data-grid-th">Edit</th>
-                <th class="data-grid-th">Delete</th>  
+                <th class="data-grid-th ed_save">Edit/Save</th>
+                <th class="data-grid-th del">Delete</th>  
             </tr>
             
                 <?php foreach($collectiondata as $collection):?>
@@ -32,8 +42,9 @@ $collectiondata = $block->Receivedata();?>
                         <td contenteditable="false" class="lastname"><?php echo $collection['lastname'];?></td>
                         <td contenteditable="false" class="email_id "><?php echo $collection['email'];?></td>
                         <td hidden class="pass"><?php echo $collection['password'];?></td>
-                        <td id="edittable" title="Edit"  type="Edit"><button>Edit</button></td>
-                        <td class=""><a href="<?php echo $this->getUrl('crud/form/index/id=.', array('delete_id' => $id));?>"> <button class="action primary"> Delete</button></a></td>
+                        <td class="edittable" title="Edit" ><button class="action primary" >Edit</button></td>
+                        <td style="display:none" class="Save" title="Save" ><button class="action primary" >Save</button></td>
+                        <td class="Delete"><a href="<?php echo $this->getUrl('crud/form/index/id=.', array('delete_id' => $id));?>"> <button class="action primary"> Delete</button></a></td>
                     </tr>
                     <?php $i++; ?>
                 <?php endforeach;?>
@@ -41,44 +52,72 @@ $collectiondata = $block->Receivedata();?>
         </table>
     </div>
 
-<script>
+ <script>
 require(
    ['jquery'],
         function($) {
-            $('#edittable').click(function () {
-              var currentTD = $(this).parents('tr').find('td');
-              if ($(this).html() == '<button>Edit</button>') {
-                    currentTD = $(this).parents('tr').find('td');
+            $('.edittable').click(function () {
+                if ($(this).html() == '<button class="action primary">Edit</button>') {
+                    var tr_search = $(this).closest("tr");
+                    var  currentTD = $(this).closest("tr").find('td');
+                    tr_search.find('.Save').show();
+                    tr_search.find('.edittable').hide();  
                     $.each(currentTD, function () {
+                        currentTD.css("background-color", "lightgrey");
                         $(this).prop('contenteditable', true);
+                        $(this).css('padding','4px');
+	                    $(this).focus();
+                        $(".edittable").prop('contenteditable', false); 
+                        $(".s_no").prop('contenteditable', false); 
+                        $(".Save").prop('contenteditable', false); 
+                        $(".Delete").prop('contenteditable', false);        
                     });
-                } else {
-                    $.each(currentTD, function () {
-                       $(this).prop('contenteditable', false);
-                    });
-                }   
-                $(this).html($("#edittable").html() == '<button>Edit</button>' ? '<button>Save</button>' : '<button>Edit</button>');
-                if($('#edittable').text() !== 'Save'){
-                    var id = $(".edit_id").text();
-                    var uname =  $(".username").text();
-                    var fname = $(".fname").text();
-                    var lname = $(".lastname").text();
-                    var e_mail_ad = $(".email_id").text();
-                    
-                    var p_wd = $(".pass").text();
-                    
-                    $.ajax({
-                        url:"<?php echo $this->getUrl('crud/form/index');?>",
-                        data:{id:id,uname:uname,fname:fname,lname:lname,email_ad:e_mail_ad,pwd:p_wd},
-                        type:'POST',
-                        success:function(response){
-                            if(response){
-                                window.location.reload();
-                            }
-                        }
-                    });      
                 }
-            });         
+            });
+            // to Save Data to database....
+            $(".Save").click(function(){
+                $(this).prop('contenteditable', false); 
+                var row = $(this).closest("tr"); 
+                var row_css = $(this).closest("tr").find('td');  
+                row_css.css("background-color", "white");  // Find the row
+                var table_id = row.find(".edit_id").text();
+                var username = row.find(".username").text();
+                var fname = row.find(".fname").text();
+                var lname = row.find(".lastname").text();
+                var e_mail_ad = row.find(".email_id").text();
+                var p_wd = row.find(".pass").text();  
+                $.ajax({
+                    url:"<?php echo $this->getUrl('crud/form/index');?>",
+                    data:{id:table_id,uname:username,fname:fname,lname:lname,email_ad:e_mail_ad,pwd:p_wd},
+                    type:'POST',
+                    success:function(response){
+                        if(response){
+                            window.location.reload();
+                        }
+                    }
+                });
+            }); 
+            $("#find").click(function(){
+                var search_user_val = $(".input-val").val();
+                $.ajax({
+                    url:"<?php echo $this->getUrl('crud/display/index');?>",
+                    data:{u_name:search_user_val},
+                    type:'POST',
+                    success:function(response){
+
+                        var rr = JSON.parse(response);
+                
+                         $(".ed_save").hide();
+                         $(".del").hide();
+                         $(".data-row").html("");
+                        for(var i=0;i<rr.count;i++)
+                        {
+                            $(".admin__table-primary").append('<tr class="data-row"><td>'+(i+1)+'</td><td  class="username">'+rr[i].username+'</td><td  class="firstname">'+rr[i].f_name+'</td><td  class="lastname">'+rr[i].l_name+'</td><td  class="email">'+rr[i].e_mail+'</td><td hidden  class="pass">'+rr[i].pass+'</td></tr>');
+                        }
+                      
+                    }
+                });
+            });        
         }
-   );
+    );
 </script>

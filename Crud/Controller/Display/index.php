@@ -61,17 +61,30 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        // $postModel = $this->_collectiondata->create();
+        if(isset($_POST['u_name'])){
+            $user_n = $_POST['u_name'];
+            $data =array();
+            
+            $fetchdata = $this->_collectiondata->create()->getCollection();
+            // $data_d = $fetchdata->getCollection();
+            $userData = $fetchdata->addFieldToFilter('username',array('like' => '%' . $user_n. '%'));
+           
+            foreach($userData as $u_collection){
+                $data[] = array(
+                    'id'=>$u_collection['excellence_crud_id'],
+                    'username'=>$u_collection['username'],
+                    'f_name'=>$u_collection['fristname'],
+                    'l_name'=>$u_collection['lastname'],
+                    'e_mail'=>$u_collection['email'],
+                    'pass' =>$u_collection['password'],
+                );
+               
+            }
+            $data['count'] = count($data);
+            return $this->getResponse()->setBody(json_encode($data));
 
 
-        // // Get news collection
-        // $postCollection = $postModel->getCollection();
-        // // Load all data of collection
-        // foreach($postCollection as $item){
-		// 	echo "<pre>";
-		// 	print_r($item->getData());
-		// 	echo "</pre>";
-		// }
+        }
 		
 		return $this->resultPageFactory->create();
     }
