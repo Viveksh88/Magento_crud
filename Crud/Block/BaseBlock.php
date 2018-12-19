@@ -21,6 +21,7 @@ class BaseBlock extends \Magento\Framework\View\Element\Template
      */
 	protected $_config;
 	protected $_collectiondata;
+	protected $_coreRegistry;
 	
     /**
      * @param \Excellence\Crud\Block\Context $context
@@ -28,13 +29,16 @@ class BaseBlock extends \Magento\Framework\View\Element\Template
      */
 	public function __construct(
 	    \Magento\Framework\View\Element\Template\Context $context,
+	    \Magento\Framework\Registry $coreRegistry,
 		
 	    \Excellence\Crud\Model\TestFactory  $collectiondata
 	)
     {
-	    
+	     $this->_coreRegistry = $coreRegistry;
 		$this->_collectiondata = $collectiondata;
 		parent::__construct($context);
+		$collection = $this->_collectiondata->create()->getCollection();
+		$this->setCollection($collection);
 	
     }
 	

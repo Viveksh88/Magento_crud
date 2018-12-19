@@ -6,13 +6,30 @@ namespace Excellence\Crud\Block\Crud;
 use Excellence\Crud\Block\BaseBlock;
 
 class Index extends BaseBlock
-{ 
-	public function Receivedata()
+{
+	protected function _prepareLayout()
 	{
-        
-		$receivedata = $this->_collectiondata->create();
-        $receivecollection = $receivedata->getCollection();
-            return $receivecollection;
+        parent::_prepareLayout();
+        if ($this->getCollection()) {
+            $pager = $this->getLayout()->createBlock(
+                'Magento\Theme\Block\Html\Pager'
+            )->setCollection(
+                $this->getCollection() // assign collection to pager
+            );
+            $this->setChild('pager', $pager);// set pager block in layout
+        }
+        return $this;
     }
+  
+    /**
+     * @return string
+     */
+    // method for get pager html
+    public function getPagerHtml()
+    {
+        return $this->getChildHtml('pager');
+    }  
+    
+   
 
 }

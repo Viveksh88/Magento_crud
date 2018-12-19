@@ -61,12 +61,11 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        if(isset($_POST['u_name'])){
-            $user_n = $_POST['u_name'];
-            $data =array();
+        $search_data = $this->getRequest()->getPostValue();
+        if(isset($search_data['u_name'])){
+            $user_n = $search_data['u_name'];
             
             $fetchdata = $this->_collectiondata->create()->getCollection();
-            // $data_d = $fetchdata->getCollection();
             $userData = $fetchdata->addFieldToFilter('username',array('like' => '%' . $user_n. '%'));
            
             foreach($userData as $u_collection){
